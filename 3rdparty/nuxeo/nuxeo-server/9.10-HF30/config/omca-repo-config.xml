@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<component name="config:omca_domain-repository">
+    <extension target="org.nuxeo.ecm.core.blob.BlobManager" point="configuration">
+   	 <blobprovider name="omca_domain">
+   		 <class>org.nuxeo.ecm.core.blob.binary.DefaultBinaryManager</class>
+   		 <property name="path">/opt/collectionspace/apache-tomcat-8.5.51/nuxeo-server/data/omca_domain</property>
+   		 <property name="key"></property>
+   	 </blobprovider>
+    </extension>
+
+    <extension target="org.nuxeo.ecm.core.repository.RepositoryService"
+   	 point="repository">
+   	 <repository name="omca_domain"
+   		 factory="org.nuxeo.ecm.core.storage.sql.ra.PoolingRepositoryFactory">
+   		 <repository name="omca_domain">
+   	     	<clustering enabled="false" delay="1000" />
+   	     	<binaryStore path="" />
+   			 <!-- Uncomment the following line to use the S3 connector to store binaries. -->
+   			 <!-- <binaryManager class="org.nuxeo.ecm.core.storage.sql.S3BinaryManager"/> -->
+
+   			 <!-- The transactional datasource for Nuxeo -->
+   			 <xa-datasource>@XA_DATASOURCE@</xa-datasource>   			 
+   			 <property name="URL">jdbc:postgresql://localhost:5432/omca_domain_omca</property>
+   			 <property name="ServerName">@DB_SERVER_HOSTNAME@</property>   			 
+   			 <property name="DatabaseName">omca_domain_omca</property>
+   			 <property name="User">@NUXEO_USER@</property>
+   			 <property name="Password">@NUXEO_PW@</property>
+
+   			 <indexing>
+   				 <fulltext analyzer="unaccent_english"/>
+   			 </indexing>
+   		 </repository>
+   	 </repository>
+    </extension>
+
+    <extension target="org.nuxeo.ecm.core.api.repository.RepositoryManager"
+   	 point="repositories">
+   	 <documentation>The omca_domain repository</documentation>
+   	 <repository name="omca_domain" label="Default Repository" />
+    </extension>
+</component>
